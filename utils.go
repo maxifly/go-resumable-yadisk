@@ -28,6 +28,9 @@ func generateContentRange(index uint64, fileChunk int, partSize int, totalSize i
 	} else {
 		from := uint64(fileChunk) * index
 		to := uint64(fileChunk) * (index + 1)
+		if to > uint64(totalSize) {
+			to = uint64(totalSize) - 1
+		}
 		contentRange = "bytes " + fmt.Sprintf("%v", from) + "-" + fmt.Sprintf("%v", to) + "/" + fmt.Sprintf("%v", totalSize)
 	}
 
@@ -48,16 +51,6 @@ func parseContentRange(contentRange string) (totalSize int64, partFrom int64, pa
 	checkError(err)
 
 	return totalSize, partFrom, partTo
-}
-
-func parseBody(body string) int64 {
-	fromTo := strings.Split(body, "/")[0]
-	splitted := strings.Split(fromTo, "-")
-
-	partTo, err := strconv.ParseInt(splitted[1], 10, 64)
-	checkError(err)
-
-	return partTo
 }
 
 func fileExists(filePath string) bool {

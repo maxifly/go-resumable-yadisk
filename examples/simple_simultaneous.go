@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/bleenco/go-resumable"
 )
 
 func main() {
